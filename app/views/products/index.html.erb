@@ -1,29 +1,46 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Products</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Codigo</th>
-      <th>Nome</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @products.each do |product| %>
-      <tr>
-        <td><%= product.codigo %></td>
-        <td><%= product.nome %></td>
-        <td><%= link_to 'Show', product %></td>
-        <td><%= link_to 'Edit', edit_product_path(product) %></td>
-        <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Product', new_product_path %>
+<div class="container">
+  
+  <div class="row mt-5">
+    <%= link_to 'Novo Contato', new_user_product_path(current_user), class: 'btn btn-success' %>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-md-offset-2 col-xs-12 mt-5">
+      <table class="table table-striped table-dark">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th colspan="1">
+              Ações
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @products.empty? %>
+            <tr>
+              <td colspan="4" class="text-center">
+                <h3>Sem produtos cadastrados.</h3>
+              </td>
+            </tr>
+          <% end %>
+          <% @products.each do |c| %>
+          <tr>
+            <td>
+              <%= c.codigo %>
+            </td>
+            <td>
+              <%= c.nome %>
+            </td>
+            <td>
+              <%= link_to 'Editar', edit_user_product_path(current_user, c), class: 'btn btn-secondary' %>
+            </td>
+            <td>
+              <%= link_to 'Excluir', user_product_path(current_user, c), method: :delete, class: 'btn btn-danger', data: { confirm: 'Tem certeza que deseja excluir?' } %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

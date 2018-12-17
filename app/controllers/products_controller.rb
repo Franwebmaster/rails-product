@@ -5,13 +5,11 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @products = current_user.product
+    @products = current_user.products
   end
 
   # GET /products/1
   # GET /products/1.json
-  def show
-  end
 
   # GET /products/new
   def new
@@ -20,45 +18,46 @@ class ProductsController < ApplicationController
 
   # GET /products/1/edit
   def edit
+    @product = current_user.products.find_by(id: params[:id])
+    if @product.nil?
+      flash[:danger] = 'Produto não encontrado.'
+      redirect_to user_products_path(current_user)
+    end
   end
 
   # POST /products
   # POST /products.json
   def create
-    @product = current_user.product.build(product_params)
-
-    respond_to do |format|
-      if @product.save
-        format.html { redirect_to @product, notice: 'Product was successfully created.' }
-        format.json { render :show, status: :created, location: @product }
-      else
-        format.html { render :new }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
+    @product = current_user.products.build(product_params)
+    if @product.save
+      flash[:success] = 'Contato criado com sucesso.'
+      redirect_to user_products_path
+    else
+      render 'new'
     end
   end
-
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
-    respond_to do |format|
-      if @product.update(product_params)
-        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
-        format.json { render :show, status: :ok, location: @product }
-      else
-        format.html { render :edit }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
+    @product = current_user.products.find(params[:id])
+    if @product.update(product_params)
+      flash[:success] = 'Contato atualizado com sucesso'
+      redirect_to user_products_path
+    else
+      render 'edit'
     end
   end
 
   # DELETE /products/1
   # DELETE /products/1.json
   def destroy
-    @product.destroy
-    respond_to do |format|
-      format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
-      format.json { head :no_content }
+    @product = current_user.products.find(params[:id])
+    if @product.destroy
+      flash[:success] = 'Contato removido com sucesso'
+      redirect_to user_products_path
+    else
+      flash[:danger] = 'Contato não encontrado.'
+      redirect_to user_products_path(current_user)
     end
   end
 

@@ -1,7 +1,7 @@
 class Product < ApplicationRecord
 
-    validates :name, presence: true, length: { maximum: 50 }
-    validates :phone, presence: true
+    validates :nome, presence: true, length: { maximum: 50 }
+    validates :codigo, presence: true
 
     belongs_to :user
 end
